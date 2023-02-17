@@ -38,7 +38,7 @@ public class Tarjeta {
 
     private Double lineaCredito;
 
-    private Double lineaDisponible;
+    //private Double lineaDisponible;
 
     private Double creditoUtilizado;
 

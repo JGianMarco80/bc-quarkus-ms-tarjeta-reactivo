@@ -51,12 +51,12 @@ public class TarjetaServiceImpl implements TarjetaService {
             if (t.getNumeroTarjeta().equals(numeroTarjeta)) {
                 if (t.getTipotarjeta().equals("2")) {
                     List<Cargo> cObtenidos = cargoClient.findByNumeroCuenta(t.getNumeroCuenta());
-                    List<PagoCredito> pgObtenidos = pagoClient.findByNumeroCuenta(t.getNumeroCuenta());
+                    List<PagoCredito> pgObtenidos = pagoClient.findByNumeroCuenta(t.getNumeroCuenta(), "2");
                     tObtenida.setId(t.getId().toString());
                     tObtenida.setNumeroTarjeta(t.getNumeroTarjeta());
                     tObtenida.setLineaCredito(t.getLineaCredito());
-                    tObtenida.setLineaDisponible(t.getLineaDisponible());
                     tObtenida.setCreditoUtilizado(t.getCreditoUtilizado());
+                    tObtenida.setLineaDisponible(t.getLineaCredito() - t.getCreditoUtilizado());
                     tObtenida.setFechaFacturacion(t.getFechaFacturacion());
                     if ( !(cObtenidos == null && cObtenidos.size() == 0) ) {
                         for (Cargo c: cObtenidos) {

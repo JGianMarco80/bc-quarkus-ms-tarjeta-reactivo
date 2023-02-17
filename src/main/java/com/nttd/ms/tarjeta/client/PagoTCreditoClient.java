@@ -12,6 +12,7 @@ import java.util.List;
 public interface PagoTCreditoClient {
 
     @GET
-    List<PagoCredito> findByNumeroCuenta(@QueryParam("numeroCuenta") String numeroCuenta);
+    List<PagoCredito> findByNumeroCuenta(@QueryParam("numeroCuenta") String numeroCuenta,
+                                         @QueryParam("tipoPago") String tipoPago);
 
 }
