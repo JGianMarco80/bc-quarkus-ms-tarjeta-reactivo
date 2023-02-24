@@ -20,4 +20,11 @@ public class TarjetaResource {
         return tarjetaService.movimientoTCredito(numeroTarjeta);
     }
 
+    @GET
+    @Path("/validar-tarjeta-debito")
+    public String validarTarjeta(@QueryParam("numeroTarjeta") String numeroTarjeta,
+                                 @QueryParam("codigoValidacion") String codigoValidacion){
+        return tarjetaService.validarTarjeta(numeroTarjeta, codigoValidacion);
+    }
+
 }

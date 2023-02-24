@@ -9,6 +9,7 @@ import com.nttd.ms.tarjeta.dto.TCreditoMovimiento;
 import com.nttd.ms.tarjeta.entity.Tarjeta;
 import com.nttd.ms.tarjeta.repository.TarjetaRepository;
 import com.nttd.ms.tarjeta.service.TarjetaService;
+import com.nttd.ms.tarjeta.util.TarjetaUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -21,6 +22,9 @@ public class TarjetaServiceImpl implements TarjetaService {
 
     @Inject
     TarjetaRepository repository;
+
+    @Inject
+    TarjetaUtil util;
 
     @RestClient
     CargoTCreditoClient cargoClient;
@@ -83,5 +87,44 @@ public class TarjetaServiceImpl implements TarjetaService {
         }
 
         return tObtenida;
+    }
+
+    @Override
+    public String validarTarjeta(String numeroTarjeta, String codigoValidacion) {
+        List<Tarjeta> tarjetas = this.listarTarjetasDebitos();
+        String codigoAprobacion = "numero de tarjeta o código de valición incorrecto";
+
+        if (tarjetas.size() != 0) {
+            for (Tarjeta t: tarjetas) {
+                if (t.getNumeroTarjeta().equals(numeroTarjeta) &&
+                        t.getCodigoValidacion().equals(codigoValidacion)) {
+                    codigoAprobacion = util.generarCodigo();
+                }
+            }
+        }
+
+        return codigoAprobacion;
+    }
+
+    private List<Tarjeta> listarTarjetasActivas(){
+        List<Tarjeta> tarjetas = repository.listAll();
+        List<Tarjeta> tarjetasActivas = new ArrayList<>();
+        for (Tarjeta t: tarjetas) {
+            if (t.getEstado().equals("1")) {
+                tarjetasActivas.add(t);
+            }
+        }
+        return tarjetasActivas;
+    }
+
+    private List<Tarjeta> listarTarjetasDebitos() {
+        List<Tarjeta> tarjetas = this.listarTarjetasActivas();
+        List<Tarjeta> tarjetasDebitos = new ArrayList<>();
+        for (Tarjeta t: tarjetas) {
+            if (t.getTipotarjeta().equals("1")) {
+                tarjetasDebitos.add(t);
+            }
+        }
+        return tarjetasDebitos;
     }
 }

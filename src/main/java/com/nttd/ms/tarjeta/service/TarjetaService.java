@@ -6,4 +6,6 @@ public interface TarjetaService {
 
     TCreditoMovimiento movimientoTCredito(String numeroTarjeta);
 
+    String validarTarjeta(String numeroTarjeta, String codigoValidacion);
+
 }
